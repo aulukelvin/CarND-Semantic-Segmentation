@@ -22,11 +22,15 @@ def test_safe(func):
 
 
 def _prevent_print(function, params):
+    nbout = sys.stdout
     sys.stdout = open(os.devnull, "w")
     function(**params)
     sys.stdout = sys.__stdout__
+    return nbout
 
-
+def _restore_nb_print(nbout):
+    sys.stdout = nbout
+    
 def _assert_tensor_shape(tensor, shape, display_name):
     assert tf.assert_rank(tensor, len(shape), message='{} has wrong rank'.format(display_name))
 
@@ -137,8 +141,8 @@ def test_train_nn(train_nn):
             'correct_label': correct_label,
             'keep_prob': keep_prob,
             'learning_rate': learning_rate}
-        _prevent_print(train_nn, parameters)
-
+        nbout = _prevent_print(train_nn, parameters)
+        _restore_nb_print(nbout)
 
 @test_safe
 def test_for_kitti_dataset(data_dir):
