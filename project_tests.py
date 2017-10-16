@@ -118,7 +118,8 @@ def test_optimize(optimize):
 def test_train_nn(train_nn):
     epochs = 1
     batch_size = 2
-
+    patience = 50
+    
     def get_batches_fn(batach_size_parm):
         shape = [batach_size_parm, 2, 3, 3]
         return np.arange(np.prod(shape)).reshape(shape)
@@ -140,7 +141,8 @@ def test_train_nn(train_nn):
             'input_image': input_image,
             'correct_label': correct_label,
             'keep_prob': keep_prob,
-            'learning_rate': learning_rate}
+            'learning_rate': learning_rate,
+            'patience':patience}
         nbout = _prevent_print(train_nn, parameters)
         _restore_nb_print(nbout)
 
